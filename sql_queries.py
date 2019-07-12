@@ -1,6 +1,6 @@
 # DROP TABLES
 
-songplay_table_drop = "DROP TABLE IF EXIST songplay;"
+songplay_table_drop = "DROP TABLE IF EXISTs songplay;"
 user_table_drop = "DROP TABLE IF EXISTS user;"
 song_table_drop = "DROP TABLE IF EXISTS song;"
 artist_table_drop = "DROP TABLE IF EXISTS artist;"
