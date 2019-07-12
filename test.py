@@ -7,6 +7,7 @@ import os
 import glob
 import psycopg2
 import pandas as pd
+import numpy as np
 from pathlib import Path
 from sql_queries import *
 
@@ -59,12 +60,21 @@ df.columns
 # - Convert the array to a list and set it to `song_data`
 
 #%%
-song_data = df[['song_id', 'title', 'artist_id', 'duration']]
+# alternate method: select columns and return as a tuple knowing that there is one song per dataframe
+song_data = next(df[['song_id', 'title', 'artist_id', 'year', 'duration']].itertuples(index=False, name=None))
 song_data
 
+#%% 
+# recommended method: select columns, select first row, get values as numpy array and convert to a list
+song_data = df[['song_id', 'title', 'artist_id', 'year', 'duration']].values[0].tolist()
+song_data
+
+# alternative that results in np.int64 and np.float64 numeric types apparently due to using iloc
+# see: https://knowledge.udacity.com/questions/38150
+# song_data = df[['song_id', 'title', 'artist_id', 'year', 'duration']].iloc[0, :].values.tolist()
 #%%
 # drop and re-create all tables
-for sql_cmd in drop_table_queries:
+for sql_cmd in drop_table_queries + create_table_queries:
     cur.execute(sql_cmd)
 
 #%% [markdown]
@@ -72,8 +82,14 @@ for sql_cmd in drop_table_queries:
 # Implement the `song_table_insert` query in `sql_queries.py` and run the cell below to insert a record for this song into the `songs` table. Remember to run `create_tables.py` before running the cell below to ensure you've created/resetted the `songs` table in the sparkify database.
 
 #%%
+# how should I handle missing values?  Here is one way:
+# replace missing values with None since pd.read_json does not handle missing value conversion
+song_data = [x if x else None for x in song_data]
+[type(x) if x else None for x in song_data]
+
+#%%
 cur.execute(song_table_insert, song_data)
-conn.commit()
+
 
 #%% [markdown]
 # Run `test.ipynb` to see if you've successfully added a record to this table.
