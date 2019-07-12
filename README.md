@@ -13,3 +13,4 @@ In this project, you'll apply what you've learned on data modeling with Postgres
 ## References
 
 1. [Million Song Dataset - FAQ with fields and data types](http://millionsongdataset.com/faq/)
+2. [Converting from Unix Timestamp to PostgreSQL Timestamp or Date](http://www.postgresonline.com/journal/archives/3-Converting-from-Unix-Timestamp-to-PostgreSQL-Timestamp-or-Date.html)
