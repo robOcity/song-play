@@ -40,10 +40,11 @@ def get_files(filepath):
 #%%
 song_root_dir = Path().cwd() / 'data' / 'song_data'
 song_files = get_files(song_root_dir)
+len(song_files)
 
 
 #%%
-filepath = song_files[1]
+filepath = song_files[0]
 print(filepath)
 
 
@@ -102,7 +103,8 @@ cur.execute(song_table_insert, song_data)
 # - Convert the array to a list and set it to `artist_data`
 
 #%%
-artist_data = 
+print(df.columns)
+artist_data = df[["artist_id", "artist_name", "artist_location", "artist_latitude", "artist_longitude"]].values[0].tolist()
 artist_data
 
 #%% [markdown]
@@ -125,15 +127,18 @@ conn.commit()
 # - Read the log file and view the data
 
 #%%
-log_files = 
+log_data_root = Path().cwd() / 'data' / 'log_data'
+log_files = get_files(log_data_root)
+len(log_files)
 
 
 #%%
-filepath = 
+filepath = log_files[0]
 
 
 #%%
-df = 
+df = pd.read_json(filepath, lines=True)
+df = df.assign(ts=pd.to_datetime(df.ts, unit='ms'))
 df.head()
 
 #%% [markdown]
