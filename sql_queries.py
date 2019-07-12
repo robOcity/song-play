@@ -1,15 +1,15 @@
 # DROP TABLES
 
-songplay_table_drop = "DROP TABLE IF EXISTs songplay;"
-user_table_drop = "DROP TABLE IF EXISTS user;"
-song_table_drop = "DROP TABLE IF EXISTS song;"
-artist_table_drop = "DROP TABLE IF EXISTS artist;"
-time_table_drop = "DROP TABLE IF EXISTS time;"
+songplay_table_drop = "DROP TABLE IF EXISTS fact_songplay;"
+user_table_drop = "DROP TABLE IF EXISTS dim_user;"
+song_table_drop = "DROP TABLE IF EXISTS dim_song;"
+artist_table_drop = "DROP TABLE IF EXISTS dim_artist;"
+time_table_drop = "DROP TABLE IF EXISTS dim_time;"
 
 # CREATE TABLES
 
 songplay_table_create = """
-CREATE TABLE IF NOT EXISTS songplay (
+CREATE TABLE IF NOT EXISTS fact_songplay (
     songplay_id varchar, 
     user_id int, 
     song_id varchar, 
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS songplay (
 """
 
 user_table_create = """
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE IF NOT EXISTS dim_user (
     user_id int, 
     first_name varchar, 
     last_name varchar, 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS user (
 """
 
 song_table_create = """
-CREATE TABLE IF NOT EXISTS song (
+CREATE TABLE IF NOT EXISTS dim_song (
     song_id varchar, 
     title varchar, 
     artist_id varchar, 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS song (
 """
 
 artist_table_create = """
-CREATE TABLE IF NOT EXISTS artist (
+CREATE TABLE IF NOT EXISTS dim_artist (
     artist_id varchar, 
     name varchar, 
     location varchar, 
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS artist (
 """
 
 time_table_create = """
-CREATE TABLE IF NOT EXISTS time (
+CREATE TABLE IF NOT EXISTS dim_time (
     start_time int, 
     hour int, 
     day int, 
@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS time (
 # INSERT RECORDS
 
 songplay_table_insert = """
-INSERT INTO TABLE songplay (
+INSERT INTO TABLE fact_songplay (
     songplay_id, 
     user_id, 
     song_id, 
@@ -85,7 +85,7 @@ VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 user_table_insert = """
-INSERT INTO TABLE user (
+INSERT INTO TABLE dim_user (
     user_id, 
     first_name, 
     last_name, 
@@ -95,7 +95,7 @@ VALUES (%s, %s, %s, %s, %s)
 """
 
 song_table_insert = """
-INSERT INTO TABLE song (
+INSERT INTO TABLE dim_song (
     song_id, 
     title, 
     artist_id, 
@@ -105,7 +105,7 @@ VALUES (%s, %s, %s, %s, %s)
 """
 
 artist_table_insert = """
-INSERT INTO TABLE artist (
+INSERT INTO TABLE dim_artist (
     artist_id, 
     name, 
     location, 
@@ -115,7 +115,7 @@ VALUES (%s, %s, %s, %s, %s)
 """
 
 time_table_insert = """
-INSERT INTO TABLE time (
+INSERT INTO TABLE dim_time (
     start_time, 
     hour, 
     day, 
