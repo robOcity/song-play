@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS dim_song (
     title varchar, 
     artist_id varchar, 
     year int, 
-    duration numeric
+    duration numeric,
     PRIMARY KEY (song_id)
 );
 """
