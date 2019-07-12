@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS dim_time (
 # INSERT RECORDS
 
 songplay_table_insert = """
-INSERT INTO TABLE fact_songplay (
+INSERT INTO fact_songplay (
     songplay_id, 
     user_id, 
     song_id, 
@@ -85,7 +85,7 @@ VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 user_table_insert = """
-INSERT INTO TABLE dim_user (
+INSERT INTO dim_user (
     user_id, 
     first_name, 
     last_name, 
@@ -95,7 +95,7 @@ VALUES (%s, %s, %s, %s, %s)
 """
 
 song_table_insert = """
-INSERT INTO TABLE dim_song (
+INSERT INTO dim_song (
     song_id, 
     title, 
     artist_id, 
@@ -105,7 +105,7 @@ VALUES (%s, %s, %s, %s, %s)
 """
 
 artist_table_insert = """
-INSERT INTO TABLE dim_artist (
+INSERT INTO dim_artist (
     artist_id, 
     name, 
     location, 
@@ -115,7 +115,7 @@ VALUES (%s, %s, %s, %s, %s)
 """
 
 time_table_insert = """
-INSERT INTO TABLE dim_time (
+INSERT INTO dim_time (
     start_time, 
     hour, 
     day, 
