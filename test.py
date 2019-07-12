@@ -7,11 +7,13 @@ import os
 import glob
 import psycopg2
 import pandas as pd
+from pathlib import Path
 from sql_queries import *
 
 
 #%%
 conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
+conn.set_session(autocommit=True)
 cur = conn.cursor()
 
 
@@ -35,16 +37,18 @@ def get_files(filepath):
 # - Read the song file and view the data
 
 #%%
-song_files = 
+song_root_dir = Path().cwd() / 'data' / 'song_data'
+song_files = get_files(song_root_dir)
 
 
 #%%
-filepath = 
+filepath = song_files[1]
+print(filepath)
 
 
 #%%
-df = 
-df.head()
+df = pd.read_json(filepath, lines=True)
+df.columns
 
 #%% [markdown]
 # ## #1: `songs` Table
@@ -55,8 +59,13 @@ df.head()
 # - Convert the array to a list and set it to `song_data`
 
 #%%
-song_data = 
+song_data = df[['song_id', 'title', 'artist_id', 'duration']]
 song_data
+
+#%%
+# drop and re-create all tables
+for sql_cmd in drop_table_queries:
+    cur.execute(sql_cmd)
 
 #%% [markdown]
 # #### Insert Record into Song Table
@@ -175,7 +184,9 @@ for i, row in user_df.iterrows():
 # ## #5: `songplays` Table
 # #### Extract Data and Songplays Table
 # This one is a little more complicated since information from the songs table, artists table, and original log file are all needed for the `songplays` table. Since the log file does not specify an ID for either the song or the artist, you'll need to get the song ID and artist ID by querying the songs and artists tables to find matches based on song title, artist name, and song duration time.
+#
 # - Implement the `song_select` query in `sql_queries.py` to find the song ID and artist ID based on the title, artist name, and duration of a song.
+#
 # - Select the timestamp, user ID, level, song ID, artist ID, session ID, location, and user agent and set to `songplay_data`
 # 
 # #### Insert Records into Songplays Table
