@@ -1,21 +1,21 @@
 # DROP TABLES
 
-songplay_table_drop = "DROP TABLE songplays;"
-user_table_drop = "DROP TABLE users;"
-song_table_drop = "DROP TABLE songs;"
-artist_table_drop = "DROP TABLE artists;"
+songplay_table_drop = "DROP TABLE songplay;"
+user_table_drop = "DROP TABLE user;"
+song_table_drop = "DROP TABLE song;"
+artist_table_drop = "DROP TABLE artist;"
 time_table_drop = "DROP TABLE time;"
 
 # CREATE TABLES
 
 songplay_table_create = """
-CREATE TABLE IF NOT EXISTS songplays (
+CREATE TABLE IF NOT EXISTS songplay (
     songplay_id varchar, 
     user_id int, 
     song_id varchar, 
     artist_id varchar, 
     session_id int, 
-    start_time, 
+    start_time int, 
     level varchar, 
     location varchar, 
     user_agent varchar,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS songplays (
 """
 
 user_table_create = """
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS user (
     user_id int, 
     first_name varchar, 
     last_name varchar, 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS users (
 """
 
 song_table_create = """
-CREATE TABLE IF NOT EXISTS songs (
+CREATE TABLE IF NOT EXISTS song (
     song_id varchar, 
     title varchar, 
     artist_id varchar, 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS songs (
 """
 
 artist_table_create = """
-CREATE TABLE IF NOT EXISTS artists (
+CREATE TABLE IF NOT EXISTS artist (
     artist_id varchar, 
     name varchar, 
     location varchar, 
@@ -71,23 +71,65 @@ CREATE TABLE IF NOT EXISTS time (
 # INSERT RECORDS
 
 songplay_table_insert = """
+INSERT INTO TABLE songplay (
+    songplay_id, 
+    user_id, 
+    song_id, 
+    artist_id, 
+    session_id, 
+    start_time, 
+    level, 
+    location, 
+    user_agent) 
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
 """
 
 user_table_insert = """
+INSERT INTO TABLE user (
+    user_id, 
+    first_name, 
+    last_name, 
+    gender, 
+    level) 
+VALUES (%s, %s, %s, %s, %s)
 """
 
 song_table_insert = """
+INSERT INTO TABLE song (
+    song_id, 
+    title, 
+    artist_id, 
+    year, 
+    duration) 
+VALUES (%s, %s, %s, %s, %s)
 """
 
 artist_table_insert = """
+INSERT INTO TABLE artist (
+    artist_id, 
+    name, 
+    location, 
+    latitude, 
+    longitude) 
+VALUES (%s, %s, %s, %s, %s)
 """
 
 time_table_insert = """
+INSERT INTO TABLE time (
+    start_time, 
+    hour, 
+    day, 
+    week, 
+    month, 
+    year, 
+    weekday) 
+VALUES (%s, %s, %s, %s, %s, %s, %s)
 """
 
 # FIND SONGS
 
 song_select = """
+
 """
 
 # QUERY LISTS
