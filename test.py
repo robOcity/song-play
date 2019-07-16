@@ -13,7 +13,9 @@ from sql_queries import *
 
 
 #%%
-conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
+conn = psycopg2.connect(
+    "host=127.0.0.1 dbname=sparkifydb user=student password=student"
+)
 conn.set_session(autocommit=True)
 cur = conn.cursor()
 
@@ -22,23 +24,24 @@ cur = conn.cursor()
 def get_files(filepath):
     all_files = []
     for root, dirs, files in os.walk(filepath):
-        files = glob.glob(os.path.join(root,'*.json'))
-        for f in files :
+        files = glob.glob(os.path.join(root, "*.json"))
+        for f in files:
             all_files.append(os.path.abspath(f))
-    
+
     return all_files
+
 
 #%% [markdown]
 # # Process `song_data`
 # In this first part, you'll perform ETL on the first dataset, `song_data`, to create the `songs` and `artists` dimensional tables.
-# 
+#
 # Let's perform ETL on a single song file and load a single record into each table to start.
 # - Use the `get_files` function provided above to get a list of all song JSON files in `data/song_data`
 # - Select the first song in this list
 # - Read the song file and view the data
 
 #%%
-song_root_dir = Path().cwd() / 'data' / 'song_data'
+song_root_dir = Path().cwd() / "data" / "song_data"
 song_files = get_files(song_root_dir)
 len(song_files)
 
@@ -63,13 +66,17 @@ df.columns
 #%%
 # alternate method: select columns and return as a tuple knowing that there is one song per dataframe
 # note: results in year as typye np.int64 and duration as type np.float64
-song_data = next(df[['song_id', 'title', 'artist_id', 'year', 'duration']].itertuples(index=False, name=None))
+song_data = next(
+    df[["song_id", "title", "artist_id", "year", "duration"]].itertuples(
+        index=False, name=None
+    )
+)
 song_data
 
-#%% 
+#%%
 # recommended method: select columns, select first row, get values as numpy array and convert to a list
 # note: results in year as typye int and duration as type float
-song_data = df[['song_id', 'title', 'artist_id', 'year', 'duration']].values[0].tolist()
+song_data = df[["song_id", "title", "artist_id", "year", "duration"]].values[0].tolist()
 song_data
 
 # alternative that results in np.int64 and np.float64 numeric types apparently due to using iloc
@@ -106,7 +113,19 @@ cur.execute(song_table_insert, song_data)
 
 #%%
 print(df.columns)
-artist_data = df[["artist_id", "artist_name", "artist_location", "artist_latitude", "artist_longitude"]].values[0].tolist()
+artist_data = (
+    df[
+        [
+            "artist_id",
+            "artist_name",
+            "artist_location",
+            "artist_latitude",
+            "artist_longitude",
+        ]
+    ]
+    .values[0]
+    .tolist()
+)
 artist_data
 
 #%% [markdown]
@@ -122,14 +141,14 @@ conn.commit()
 #%% [markdown]
 # # Process `log_data`
 # In this part, you'll perform ETL on the second dataset, `log_data`, to create the `time` and `users` dimensional tables, as well as the `songplays` fact table.
-# 
+#
 # Let's perform ETL on a single log file and load a single record into each table.
 # - Use the `get_files` function provided above to get a list of all log JSON files in `data/log_data`
 # - Select the first log file in this list
 # - Read the log file and view the data
 
 #%%
-log_data_root = Path().cwd() / 'data' / 'log_data'
+log_data_root = Path().cwd() / "data" / "log_data"
 log_files = get_files(log_data_root)
 len(log_files)
 
@@ -156,20 +175,24 @@ f"before: {before}  after:{after}"
 # - Create a dataframe, `time_data,` containing the time data for this file by combining `column_labels` and `time_data` into a dictionary and converting this into a dataframe
 
 #%%
+
 # cite: https://pandas.pydata.org/pandas-docs/stable/reference/series.html#time-series-related
-df = df.assign(timestamp=pd.to_datetime(df.ts, unit='ms'))
-df.timestamp = df.timestamp.dt.tz_localize('UTC')
+df = df.assign(timestamp=pd.to_datetime(df.ts, unit="ms"))
+df.timestamp = df.timestamp.dt.tz_localize("UTC")
 df.head(10)
 
 #%%
-time_df = pd.DataFrame({
-    "timestamp": df.timestamp, 
-    "hour": df.timestamp.dt.hour, 
-    "day": df.timestamp.dt.day, 
-    "week_of_year":df.timestamp.dt.week, 
-    "month":df.timestamp.dt.month, 
-    "year":df.timestamp.dt.year ,  
-    "weekday": df.timestamp.dt.weekday})
+time_df = pd.DataFrame(
+    {
+        "timestamp": df.timestamp,
+        "hour": df.timestamp.dt.hour,
+        "day": df.timestamp.dt.day,
+        "week_of_year": df.timestamp.dt.week,
+        "month": df.timestamp.dt.month,
+        "year": df.timestamp.dt.year,
+        "weekday": df.timestamp.dt.weekday,
+    }
+)
 time_df.info()
 
 #%% [markdown]
@@ -188,7 +211,12 @@ for i, row in time_df.iterrows():
 # - Select columns for user ID, first name, last name, gender and level and set to `user_df`
 
 #%%
-user_df = 
+df.columns
+
+#%%
+user_df = df[["userId", "firstName", "lastName", "gender", "level"]]
+user_df = user_df.drop_duplicates(subset="userId", keep="last")
+user_df.shape
 
 #%% [markdown]
 # #### Insert Records into Users Table
@@ -201,6 +229,7 @@ for i, row in user_df.iterrows():
 
 #%% [markdown]
 # Run `test.ipynb` to see if you've successfully added records to this table.
+
 #%% [markdown]
 # ## #5: `songplays` Table
 # #### Extract Data and Songplays Table
@@ -209,7 +238,7 @@ for i, row in user_df.iterrows():
 # - Implement the `song_select` query in `sql_queries.py` to find the song ID and artist ID based on the title, artist name, and duration of a song.
 #
 # - Select the timestamp, user ID, level, song ID, artist ID, session ID, location, and user agent and set to `songplay_data`
-# 
+#
 # #### Insert Records into Songplays Table
 # - Implement the `songplay_table_insert` query and run the cell below to insert records for the songplay actions in this log file into the `songplays` table. Remember to run `create_tables.py` before running the cell below to ensure you've created/resetted the `songplays` table in the sparkify database.
 
@@ -219,7 +248,7 @@ for index, row in df.iterrows():
     # get songid and artistid from song and artist tables
     cur.execute(song_select, (row.song, row.artist, row.length))
     results = cur.fetchone()
-    
+
     if results:
         songid, artistid = results
     else:
@@ -243,6 +272,4 @@ conn.close()
 # Use what you've completed in this notebook to implement `etl.py`.
 
 #%%
-
-
 
