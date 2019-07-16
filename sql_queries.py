@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS dim_artist (
 
 time_table_create = """
 CREATE TABLE IF NOT EXISTS dim_time (
-    start_time int, 
+    start_time timestamp, 
     hour int, 
     day int, 
     week int, 
