@@ -135,11 +135,12 @@ len(log_files)
 #%%
 filepath = log_files[0]
 
-
 #%%
 df = pd.read_json(filepath, lines=True)
-df = df.assign(ts=pd.to_datetime(df.ts, unit='ms'))
-df.head()
+before = df.shape
+df = df.loc[df.page.isin(["NextSong"])]
+after = df.shape
+f"before: {before}  after:{after}"
 
 #%% [markdown]
 # ## #3: `time` Table
@@ -147,29 +148,27 @@ df.head()
 # - Filter records by `NextSong` action
 # - Convert the `ts` timestamp column to datetime
 #   - Hint: the current timestamp is in milliseconds
-# - Extract the timestamp, hour, day, week of year, month, year, and weekday from the `ts` column and set `time_data` to a list containing these values in order
+# - Extract the timestamp, hour, day, week of year, month, year, and weekday from the `ts` column and set `time_df` to a list containing these values in order
 #   - Hint: use pandas' [`dt` attribute](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.dt.html) to access easily datetimelike properties.
 # - Specify labels for these columns and set to `column_labels`
-# - Create a dataframe, `time_df,` containing the time data for this file by combining `column_labels` and `time_data` into a dictionary and converting this into a dataframe
+# - Create a dataframe, `time_data,` containing the time data for this file by combining `column_labels` and `time_data` into a dictionary and converting this into a dataframe
 
 #%%
-df = 
-df.head()
-
-
-#%%
-t = 
-t.head()
-
+# cite: https://pandas.pydata.org/pandas-docs/stable/reference/series.html#time-series-related
+df = df.assign(timestamp=pd.to_datetime(df.ts, unit='ms'))
+df.timestamp = df.timestamp.dt.tz_localize('UTC')
+df.head(10)
 
 #%%
-time_data = ()
-column_labels = ()
-
-
-#%%
-time_df = 
-time_df.head()
+time_df = pd.DataFrame({
+    "timestamp": df.timestamp, 
+    "hour": df.timestamp.dt.hour, 
+    "day": df.timestamp.dt.day, 
+    "week_of_year":df.timestamp.dt.week, 
+    "month":df.timestamp.dt.month, 
+    "year":df.timestamp.dt.year ,  
+    "weekday": df.timestamp.dt.weekday})
+time_df.info()
 
 #%% [markdown]
 # #### Insert Records into Time Table
@@ -178,7 +177,6 @@ time_df.head()
 #%%
 for i, row in time_df.iterrows():
     cur.execute(time_table_insert, list(row))
-    conn.commit()
 
 #%% [markdown]
 # Run `test.ipynb` to see if you've successfully added records to this table.
