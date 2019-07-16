@@ -62,11 +62,13 @@ df.columns
 
 #%%
 # alternate method: select columns and return as a tuple knowing that there is one song per dataframe
+# note: results in year as typye np.int64 and duration as type np.float64
 song_data = next(df[['song_id', 'title', 'artist_id', 'year', 'duration']].itertuples(index=False, name=None))
 song_data
 
 #%% 
 # recommended method: select columns, select first row, get values as numpy array and convert to a list
+# note: results in year as typye int and duration as type float
 song_data = df[['song_id', 'title', 'artist_id', 'year', 'duration']].values[0].tolist()
 song_data
 
