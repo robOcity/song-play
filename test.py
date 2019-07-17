@@ -248,14 +248,38 @@ for index, row in df.iterrows():
     # get songid and artistid from song and artist tables
     cur.execute(song_select, (row.song, row.artist, row.length))
     results = cur.fetchone()
+    print(f"row={row}\n\n")
 
     if results:
         songid, artistid = results
     else:
         songid, artistid = None, None
 
+        print(
+            f"""
+            row.userId={row.userId}
+            songid={songid}
+            artistid={artistid}
+            row.sessionId={row.sessionId}
+            row.ts={row.ts/1000}
+            row.level={row.level}
+            row.location={row.location}
+            row.userAgent={row.userAgent}
+            """
+        )
+
     # insert songplay record
-    songplay_data = ()
+    songplay_data = (
+        row.userId,
+        songid,
+        artistid,
+        row.sessionId,
+        row.ts / 1000,
+        row.level,
+        row.location,
+        row.userAgent,
+    )
+    print(song_data)
     cur.execute(songplay_table_insert, songplay_data)
     conn.commit()
 

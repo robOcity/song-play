@@ -10,12 +10,12 @@ time_table_drop = "DROP TABLE IF EXISTS dim_time;"
 
 songplay_table_create = """
 CREATE TABLE IF NOT EXISTS fact_songplay (
-    songplay_id varchar, 
+    songplay_id int, 
     user_id int, 
     song_id varchar, 
     artist_id varchar, 
     session_id int, 
-    start_time int, 
+    start_time timestamp, 
     level varchar, 
     location varchar, 
     user_agent varchar,
@@ -72,17 +72,18 @@ CREATE TABLE IF NOT EXISTS dim_time (
 
 songplay_table_insert = """
 INSERT INTO fact_songplay (
-    songplay_id, 
     user_id, 
     song_id, 
     artist_id, 
     session_id, 
-    start_time, 
+    CAST(start_time AS timestamp),
     level, 
     location, 
     user_agent) 
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
 """
+# CAST(start_time AS timestamp),
+# to_timestamp(start_time, 'S'),
 
 user_table_insert = """
 INSERT INTO dim_user (
@@ -129,7 +130,9 @@ VALUES (%s, %s, %s, %s, %s, %s, %s)
 # FIND SONGS
 
 song_select = """
-
+SELECT s.song_id, a.artist_id FROM dim_song s
+JOIN dim_artist a ON s.artist_id = a.artist_id
+WHERE s.title = %s AND a.name = %s AND s.duration = %s;
 """
 
 # QUERY LISTS
