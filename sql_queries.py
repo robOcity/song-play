@@ -10,7 +10,7 @@ time_table_drop = "DROP TABLE IF EXISTS dim_time;"
 
 songplay_table_create = """
 CREATE TABLE IF NOT EXISTS fact_songplay (
-    songplay_id SERIAL PRIMARY KEY, 
+    songplay_id SERIAL, 
     user_id int, 
     song_id varchar, 
     artist_id varchar, 
@@ -18,12 +18,13 @@ CREATE TABLE IF NOT EXISTS fact_songplay (
     start_time timestamp, 
     level varchar, 
     location varchar, 
-    user_agent varchar;
+    user_agent varchar,
+    PRIMARY KEY (songplay_id));
 """
 
 user_table_create = """
 CREATE TABLE IF NOT EXISTS dim_user (
-    user_id int, 
+    user_id varchar, 
     first_name varchar, 
     last_name varchar, 
     gender varchar, 
@@ -75,14 +76,12 @@ INSERT INTO fact_songplay (
     song_id, 
     artist_id, 
     session_id, 
-    CAST(start_time AS timestamp),
+    to_timestamp(start_time::numeric, 'MS'),
     level, 
     location, 
     user_agent) 
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
 """
-# CAST(start_time AS timestamp),
-# to_timestamp(start_time, 'S'),
 
 user_table_insert = """
 INSERT INTO dim_user (
@@ -91,7 +90,7 @@ INSERT INTO dim_user (
     last_name, 
     gender, 
     level) 
-VALUES (%s, %s, %s, %s, %s)
+VALUES (%s, %s, %s, %s, %s);
 """
 
 song_table_insert = """
@@ -101,7 +100,7 @@ INSERT INTO dim_song (
     artist_id, 
     year, 
     duration) 
-VALUES (%s, %s, %s, %s, %s)
+VALUES (%s, %s, %s, %s, %s);
 """
 
 artist_table_insert = """
@@ -111,7 +110,7 @@ INSERT INTO dim_artist (
     location, 
     latitude, 
     longitude) 
-VALUES (%s, %s, %s, %s, %s)
+VALUES (%s, %s, %s, %s, %s);
 """
 
 time_table_insert = """
@@ -123,7 +122,7 @@ INSERT INTO dim_time (
     month, 
     year, 
     weekday) 
-VALUES (%s, %s, %s, %s, %s, %s, %s)
+VALUES (%s, %s, %s, %s, %s, %s, %s);
 """
 
 # FIND SONGS
