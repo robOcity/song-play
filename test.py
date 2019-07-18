@@ -43,17 +43,8 @@ def get_files(filepath):
 #%%
 song_root_dir = Path().cwd() / "data" / "song_data"
 song_files = get_files(song_root_dir)
-len(song_files)
-
-
-#%%
 filepath = song_files[0]
-print(filepath)
-
-
-#%%
 df = pd.read_json(filepath, lines=True)
-df.columns
 
 #%% [markdown]
 # ## #1: `songs` Table
@@ -95,7 +86,6 @@ for sql_cmd in drop_table_queries + create_table_queries:
 # how should I handle missing values?  Here is one way:
 # replace missing values with None since pd.read_json does not handle missing value conversion
 song_data = [x if x else None for x in song_data]
-[type(x) if x else None for x in song_data]
 
 #%%
 cur.execute(song_table_insert, song_data)
@@ -134,7 +124,6 @@ artist_data
 
 #%%
 cur.execute(artist_table_insert, artist_data)
-conn.commit()
 
 #%% [markdown]
 # Run `test.ipynb` to see if you've successfully added a record to this table.
@@ -159,10 +148,7 @@ filepath = log_files[0]
 #%%
 df = pd.read_json(filepath, lines=True)
 df = df.assign(ts=pd.to_datetime(df.ts, unit="ms"))
-before = df.shape
 df = df.loc[df.page.isin(["NextSong"])]
-after = df.shape
-f"before: {before}  after:{after}"
 
 #%% [markdown]
 # ## #3: `time` Table
@@ -194,7 +180,6 @@ time_df = pd.DataFrame(
         "weekday": df.timestamp.dt.weekday,
     }
 )
-time_df.info()
 
 #%% [markdown]
 # #### Insert Records into Time Table
@@ -217,7 +202,6 @@ df.columns
 #%%
 user_df = df[["userId", "firstName", "lastName", "gender", "level"]]
 user_df = user_df.drop_duplicates(subset="userId", keep="last")
-user_df.shape
 
 #%% [markdown]
 # #### Insert Records into Users Table
@@ -226,7 +210,6 @@ user_df.shape
 #%%
 for i, row in user_df.iterrows():
     cur.execute(user_table_insert, row)
-    conn.commit()
 
 #%% [markdown]
 # Run `test.ipynb` to see if you've successfully added records to this table.
@@ -249,25 +232,11 @@ for index, row in df.iterrows():
     # get songid and artistid from song and artist tables
     cur.execute(song_select, (row.song, row.artist, row.length))
     results = cur.fetchone()
-    print(f"row={row}\n\n")
 
     if results:
         songid, artistid = results
     else:
         songid, artistid = None, None
-
-        print(
-            f"""
-            row.userId={row.userId}
-            songid={songid}
-            artistid={artistid}
-            row.sessionId={row.sessionId}
-            row.ts={type(row.ts)}
-            row.level={row.level}
-            row.location={row.location}
-            row.userAgent={row.userAgent}
-            """
-        )
 
     # insert songplay record
     songplay_data = (
@@ -282,7 +251,6 @@ for index, row in df.iterrows():
     )
     print(song_data)
     cur.execute(songplay_table_insert, songplay_data)
-    conn.commit()
 
 #%% [markdown]
 # Run `test.ipynb` to see if you've successfully added records to this table.
@@ -295,6 +263,3 @@ conn.close()
 #%% [markdown]
 # # Implement `etl.py`
 # Use what you've completed in this notebook to implement `etl.py`.
-
-#%%
-
