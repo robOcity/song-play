@@ -19,3 +19,4 @@ In this project, you'll apply what you've learned on data modeling with Postgres
 6. [Auto incrementing primary key in postgresql](https://stackoverflow.com/questions/7718585/how-to-set-auto-increment-primary-key-in-postgresql)
 7. [How to insert current_timestamp into Postgres via python](https://stackoverflow.com/questions/6018214/how-to-insert-current-timestamp-into-postgres-via-python)
 8. [Pandas convert dataframe to array of tuples](https://stackoverflow.com/questions/9758450/pandas-convert-dataframe-to-array-of-tuples)
+9. [Psycopg2 Extras - Fast execution helpers¶](http://initd.org/psycopg/docs/extras.html?highlight=executemany)
