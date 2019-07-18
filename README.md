@@ -18,3 +18,4 @@ In this project, you'll apply what you've learned on data modeling with Postgres
 5. [Passing python variable to sql statement psycopg2 pandas](https://stackoverflow.com/questions/38317601/passing-python-variable-to-sql-statement-psycopg2-pandas)
 6. [Auto incrementing primary key in postgresql](https://stackoverflow.com/questions/7718585/how-to-set-auto-increment-primary-key-in-postgresql)
 7. [How to insert current_timestamp into Postgres via python](https://stackoverflow.com/questions/6018214/how-to-insert-current-timestamp-into-postgres-via-python)
+8. [Pandas convert dataframe to array of tuples](https://stackoverflow.com/questions/9758450/pandas-convert-dataframe-to-array-of-tuples)
