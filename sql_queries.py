@@ -76,12 +76,13 @@ INSERT INTO fact_songplay (
     song_id, 
     artist_id, 
     session_id, 
-    to_timestamp(start_time::numeric, 'MS'),
+    start_time,
     level, 
     location, 
     user_agent) 
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
 """
+# to_timestamp(start_time::numeric, 'MS'),
 
 user_table_insert = """
 INSERT INTO dim_user (

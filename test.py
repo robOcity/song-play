@@ -158,6 +158,7 @@ filepath = log_files[0]
 
 #%%
 df = pd.read_json(filepath, lines=True)
+df = df.assign(ts=pd.to_datetime(df.ts, unit="ms"))
 before = df.shape
 df = df.loc[df.page.isin(["NextSong"])]
 after = df.shape
@@ -261,7 +262,7 @@ for index, row in df.iterrows():
             songid={songid}
             artistid={artistid}
             row.sessionId={row.sessionId}
-            row.ts={row.ts}
+            row.ts={type(row.ts)}
             row.level={row.level}
             row.location={row.location}
             row.userAgent={row.userAgent}
