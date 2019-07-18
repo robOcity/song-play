@@ -261,7 +261,7 @@ for index, row in df.iterrows():
             songid={songid}
             artistid={artistid}
             row.sessionId={row.sessionId}
-            row.ts={int(row.ts/1000)}
+            row.ts={row.ts}
             row.level={row.level}
             row.location={row.location}
             row.userAgent={row.userAgent}
@@ -274,7 +274,7 @@ for index, row in df.iterrows():
         songid,
         artistid,
         row.sessionId,
-        row.ts / 1000,
+        row.ts,
         row.level,
         row.location,
         row.userAgent,
