@@ -1,21 +1,22 @@
 import os
 import glob
 import psycopg2
+from psycopg2.extras import execute_batch
 import pandas as pd
 from sql_queries import *
 
 
 def process_song_file(cur, filepath):
     # open song file
-    df = 
+    df = pd.read_json(filepath, lines=True)
 
-    # insert song record
-    song_data = 
-    cur.execute(song_table_insert, song_data)
+    # efficiently insert song records in batchs by minimizing server round-trips
+    song_data = [tuple(x) for x in df[["song_id", "title", "artist_id", "year", "duration"]].values]
+    execute_batch(cur, song_table_insert, song_data)
     
-    # insert artist record
-    artist_data = 
-    cur.execute(artist_table_insert, artist_data)
+    # efficiently insert artist records in batchs by minimizing server round-trips
+    artist_data = [tuple(x) for x in df[["artist_id", "artist_name", "artist_location", "artist_latitude", "artist_longitude"]].values]
+    execute_batch(cur, artist_table_insert, artist_data)
 
 
 def process_log_file(cur, filepath):
