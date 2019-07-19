@@ -11,13 +11,21 @@ def process_song_file(cur, filepath):
     df = pd.read_json(filepath, lines=True)
 
     # efficiently insert song records in batchs by minimizing server round-trips
-    song_data = [tuple(x) for x in df[["song_id", "title",
-                                       "artist_id", "year", "duration"]].values]
+    song_data = [tuple(x) for x in df[[
+        "song_id",
+        "title",
+        "artist_id",
+        "year",
+        "duration"]].values]
     execute_batch(cur, song_table_insert, song_data)
 
     # efficiently insert artist records in batchs by minimizing server round-trips
-    artist_data = [tuple(x) for x in df[["artist_id", "artist_name",
-                                         "artist_location", "artist_latitude", "artist_longitude"]].values]
+    artist_data = [tuple(x) for x in df[[
+        "artist_id",
+        "artist_name",
+        "artist_location",
+        "artist_latitude",
+        "artist_longitude"]].values]
     execute_batch(cur, artist_table_insert, artist_data)
 
 
@@ -40,7 +48,6 @@ def process_log_file(cur, filepath):
             "week_of_year": df.ts.dt.week,
             "month": df.ts.dt.month,
             "year": df.ts.dt.year,
-
             "weekday": df.ts.dt.weekday,
         })
 
@@ -104,11 +111,18 @@ def process_data(cur, conn, filepath, func):
         print('{}/{} files processed.'.format(i, num_files))
 
 
-def main():
+def main(debug=False):
+    # connect to database
     conn = psycopg2.connect(
         "host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
+    if debug:
+        # drop and re-create all tables
+        for sql_cmd in drop_table_queries + create_table_queries:
+            cur.execute(sql_cmd)
+
+    # pipeline: read in files > insert into postgres tables
     process_data(cur, conn, filepath='data/song_data', func=process_song_file)
     process_data(cur, conn, filepath='data/log_data', func=process_log_file)
 
@@ -116,4 +130,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(debug=True)
