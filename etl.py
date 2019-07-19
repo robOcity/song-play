@@ -11,34 +11,49 @@ def process_song_file(cur, filepath):
     df = pd.read_json(filepath, lines=True)
 
     # efficiently insert song records in batchs by minimizing server round-trips
-    song_data = [tuple(x) for x in df[["song_id", "title", "artist_id", "year", "duration"]].values]
+    song_data = [tuple(x) for x in df[["song_id", "title",
+                                       "artist_id", "year", "duration"]].values]
     execute_batch(cur, song_table_insert, song_data)
-    
+
     # efficiently insert artist records in batchs by minimizing server round-trips
-    artist_data = [tuple(x) for x in df[["artist_id", "artist_name", "artist_location", "artist_latitude", "artist_longitude"]].values]
+    artist_data = [tuple(x) for x in df[["artist_id", "artist_name",
+                                         "artist_location", "artist_latitude", "artist_longitude"]].values]
     execute_batch(cur, artist_table_insert, artist_data)
 
 
 def process_log_file(cur, filepath):
     # open log file
-    df = 
+    df = pd.read_json(filepath, lines=True)
 
     # filter by NextSong action
-    df = 
+    df = df.loc[df.page.isin(["NextSong"])]
 
     # convert timestamp column to datetime
-    t = 
-    
+    df = df.assign(ts=pd.to_datetime(df.ts, unit="ms", utc=True))
+
     # insert time data records
-    time_data = 
-    column_labels = 
-    time_df = 
+    time_df = pd.DataFrame(
+        {
+            "timestamp": df.ts,
+            "hour": df.ts.dt.hour,
+            "day": df.ts.dt.day,
+            "week_of_year": df.ts.dt.week,
+            "month": df.ts.dt.month,
+            "year": df.ts.dt.year,
+
+            "weekday": df.ts.dt.weekday,
+        })
 
     for i, row in time_df.iterrows():
         cur.execute(time_table_insert, list(row))
 
     # load user table
-    user_df = 
+    user_df = df[[
+        "userId",
+        "firstName",
+        "lastName",
+        "gender",
+        "level"]].drop_duplicates(subset="userId", keep="last")
 
     # insert user records
     for i, row in user_df.iterrows():
@@ -46,18 +61,27 @@ def process_log_file(cur, filepath):
 
     # insert songplay records
     for index, row in df.iterrows():
-        
+
         # get songid and artistid from song and artist tables
         cur.execute(song_select, (row.song, row.artist, row.length))
         results = cur.fetchone()
-        
+
         if results:
             songid, artistid = results
         else:
             songid, artistid = None, None
 
         # insert songplay record
-        songplay_data = 
+        songplay_data = (
+            row.userId,
+            songid,
+            artistid,
+            row.sessionId,
+            row.ts,
+            row.level,
+            row.location,
+            row.userAgent,
+        )
         cur.execute(songplay_table_insert, songplay_data)
 
 
@@ -65,8 +89,8 @@ def process_data(cur, conn, filepath, func):
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
-        files = glob.glob(os.path.join(root,'*.json'))
-        for f in files :
+        files = glob.glob(os.path.join(root, '*.json'))
+        for f in files:
             all_files.append(os.path.abspath(f))
 
     # get total number of files found
@@ -81,7 +105,8 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
-    conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
+    conn = psycopg2.connect(
+        "host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
     process_data(cur, conn, filepath='data/song_data', func=process_song_file)
