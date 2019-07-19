@@ -90,7 +90,8 @@ INSERT INTO dim_user (
     last_name, 
     gender, 
     level) 
-VALUES (%s, %s, %s, %s, %s);
+VALUES (%s, %s, %s, %s, %s)
+ON CONFLICT DO NOTHING;
 """
 
 song_table_insert = """
@@ -100,7 +101,8 @@ INSERT INTO dim_song (
     artist_id, 
     year, 
     duration) 
-VALUES (%s, %s, %s, %s, %s);
+VALUES (%s, %s, %s, %s, %s)
+ON CONFLICT DO NOTHING;
 """
 
 artist_table_insert = """
@@ -110,7 +112,8 @@ INSERT INTO dim_artist (
     location, 
     latitude, 
     longitude) 
-VALUES (%s, %s, %s, %s, %s);
+VALUES (%s, %s, %s, %s, %s)
+ON CONFLICT DO NOTHING;
 """
 
 time_table_insert = """
@@ -122,7 +125,8 @@ INSERT INTO dim_time (
     month, 
     year, 
     weekday) 
-VALUES (%s, %s, %s, %s, %s, %s, %s);
+VALUES (%s, %s, %s, %s, %s, %s, %s)
+ON CONFLICT DO NOTHING;
 """
 
 # FIND SONGS
@@ -149,4 +153,3 @@ drop_table_queries = [
     artist_table_drop,
     time_table_drop,
 ]
-
