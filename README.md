@@ -5,15 +5,19 @@
 Have you ever wondered how to take raw log files and transform them into a relational database?  In this repository, I will show you how using [pandas](https://pandas.pydata.org/), [Postgres](https://www.postgresql.org/) and [Python](https://www.python.org/).  You will see how to read log files into a tabular panda's dataframe, use SQL to create a star-scheme to do aggregations and analytics and glued together with python.   
 
 ## Scenario
-Here is the scenario posed for this project:
-
-> A startup called Sparkify wants to analyze the data they've been collecting on songs and user activity on their new music streaming app. The analytics team is particularly interested in understanding what songs users are listening to. Currently, they don't have an easy way to query their data, which resides in a directory of JSON logs on user activity on the app, as well as a directory with JSON metadata on the songs in their app.
->
-> They'd like a data engineer to create a PostgreSQL database with tables designed to optimize queries on song play analysis, and bring you on the project. Your role is to create a database schema and ETL pipeline for this analysis. You'll be able to test your database and ETL pipeline by running queries given to you by the analytics team from Sparkify and compare your results with their expected results.
+Sparkify -- a fictitious startup -- wants to analyze the data they've been collecting on songs and user activity on their new music streaming app. They are particularly interested in understanding what songs user's are listening to. Currently, their data, stored JSON logs files, is difficult to analyze.  They want to create a database optimized to analyze which songs user's are playing. To perform this analysis they envision a database schema and extract-transform-load (ETL) pipeline.
 
 ## Analytic Needs
 
-What songs are subscriber's listening to?  To answer this question I am going to restructure the Sparkify log files into a relational database for its analytical capabilities.  Log files of subscriber activities are gathered using Sparkify's Online Transactional Processing System optimized for fast writes.  To perform the analysis, I will use a star-schema to organize the database's tables.  
+What songs are subscriber's listening to?  To answer this question I am going to restructure the Sparkify log files into a relational database for its analytical capabilities.  Log files of subscriber activities are gathered using Sparkify's Online Transactional Processing System that is optimized for fast writes.  Think log files.  Profiting from analysis of user data improves with increased volume, greater integrity and minimal redundancy.  This is the realm of data warehouses, and ingesting transactional data requires the data that it be restructured.  Star schemas help to normalize the data so that desired queries are simplified.  Think of tables of data where each row has a unique identifier or primary key.  This is know as the second-normal-form and tables of this kind are common in data warehouses.  The idea of star schema is simple, one central fact table that is related to dimension tables by their primary keys.  
+
+
+
+## Implementation
+
+
+
+## Files
 
 ## References
 
