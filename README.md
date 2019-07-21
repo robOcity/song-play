@@ -2,7 +2,7 @@
 
 ## Summary
 
-Have you ever wondered how to take raw log files and transform them into a relational database?  In this repository, I will show you how using [pandas](https://pandas.pydata.org/), [Postgres](https://www.postgresql.org/) and [Python](https://www.python.org/).  You will see how to read log files into a tabular panda's dataframe, use SQL to create a star-scheme to do aggregations and analytics and glued together with python.   
+Have you ever wondered how to take raw log files and transform them into a relational database?  In this repository, I will show you how using [pandas](https://pandas.pydata.org/), [Postgres](https://www.postgresql.org/) and  [pscopg2](http://initd.org/psycopg/) in [Python](https://www.python.org/).  You will see how to read log files into a tabular panda's dataframe, use SQL to create a star-scheme to do aggregations and analytics and glued together with python.   
 
 ## Purpose
 
@@ -13,7 +13,7 @@ Sparkify -- a fictitious startup -- wants to analyze the data they've been colle
 What songs are subscriber's listening to?  To answer this question I am going to restructure the Sparkify log files into a relational database for its analytical capabilities.  Log files of subscriber activities are gathered using Sparkify's Online Transactional Processing System that is optimized for fast writes.  Think log files.  Profiting from analysis of user data improves with increased volume, greater integrity and minimal redundancy.  This is the realm of data warehouses, and ingesting transactional data requires the data that it be restructured.  Star schemas help to normalize the data so that desired queries are simplified.  Think of tables of data where each row has a unique identifier or primary key.  This is know as the second-normal-form and tables of this kind are common in data warehouses.  The idea of star schema is simple, one central fact table that is related to dimension tables by their primary keys.  
 
 ## Implementation
-
+PostgreSQL tables are managed using SQL statements that are executed using the Python psycopg2 package.  The star schema is implemented in these SQL statements.  Data files are read using the `read_json` function that returns a panda's dataframe.  Columns and rows from the dataframe are selected and output as tuples for insertion into the database.  Connections to the database are managed by psycopg2 that also provided the cursor object used to interact with the tables.  
 
 
 ## Files Descriptions
