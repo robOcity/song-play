@@ -41,20 +41,20 @@ What songs are subscriber's listening to?  To answer this question I am going to
 
 ## References
 
-1. [Million Song Dataset - FAQ with fields and data types](http://millionsongdataset.com/faq/)
+1. [Million Song Dataset - FAQ with fields and data types](http://millionsongdataset.com/faq/) - Lists the fields and datatypes used in the [Million Song Dataset](http://millionsongdataset.com/).
    
 2. [Converting from Unix Timestamp to PostgreSQL Timestamp or Date](http://www.postgresonline.com/journal/archives/3. Converting-from-Unix-Timestamp-to-PostgreSQL-Timestamp-or-Date.html)
 
 3. [PostgreSQL Keyword List](https://www.postgresql.org/docs/current/sql-keywords-appendix.html) - Note: _USER_ is a reserved keyword in Postgres and cannot be used as a table name. 
  
-4. [Passing python variable to sql statement psycopg2 pandas](https://stackoverflow.com/questions/38317601/passing-python-variable-to-sql-statement-psycopg2-pandas)
+4. [Psycopg2 - Fast execution helpers](http://initd.org/psycopg/docs/extras.html#fast-execution-helpers) - How to use the `executemany()` method to insert many rows at once into a table.
 
-5. [Auto incrementing primary key in postgresql](https://stackoverflow.com/questions/7718585/how-to-set-auto-increment-primary-key-in-postgresql)
+5. [Using PostgreSQL SERIAL To Create Auto-increment Column](http://www.postgresqltutorial.com/postgresql-serial/) - How to create a primary key that increments automatically.
 
-6. [How to insert current_timestamp into Postgres via python](https://stackoverflow.com/questions/6018214/how-to-insert-current-timestamp-into-postgres-via-python)
+6. [How to insert current_timestamp into Postgres via python](https://stackoverflow.com/questions/6018214/how-to-insert-current-timestamp-into-postgres-via-python) - Explains how to easily insert timestamps into PostgreSQL by converting them to datetime objects in Python and then letting [pscopg2](http://initd.org/psycopg/) handle the rest. 
 
-7. [Pandas convert dataframe to array of tuples](https://stackoverflow.com/questions/9758450/pandas-convert-dataframe-to-array-of-tuples)
+7. [Pandas convert dataframe to array of tuples](https://stackoverflow.com/questions/9758450/pandas-convert-dataframe-to-array-of-tuples) - Examples and explanation of how to convert rows of [pandas](https://pandas.pydata.org/) dataframe into tuples for insertion into the database.  
 
-8. [Psycopg2 Extras - Fast execution helpers¶](http://initd.org/psycopg/docs/extras.html?highlight=executemany)
+8. [Psycopg2 Extras - Fast execution helpers](http://initd.org/psycopg/docs/extras.html?highlight=executemany) - Explanation and examples of how to insert many records into a table in one transaction using psycopg2's `executemany()` method.  
 
-9.  [How to UPSERT (MERGE, INSERT … ON DUPLICATE UPDATE) in PostgreSQL?](https://stackoverflow.com/questions/17267417/how-to-upsert-merge-insert-on-duplicate-update-in-postgresql?noredirect=1&lq=1)
+9.  [How to UPSERT (MERGE, INSERT … ON DUPLICATE UPDATE) in PostgreSQL?](https://stackoverflow.com/questions/17267417/how-to-upsert-merge-insert-on-duplicate-update-in-postgresql?noredirect=1&lq=1) - How to handle duplicate primary keys in PostgreSQL INSERT statements that is informally referred to as `upsert`.  
