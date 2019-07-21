@@ -8,11 +8,14 @@ Have you ever wondered how to take raw log files and transform them into a relat
 
 Sparkify -- a fictitious startup -- wants to analyze the data they've been collecting on songs and user activity on their new music streaming app. They are particularly interested in understanding what songs user's are listening to. Currently, their data, stored JSON logs files, is difficult to analyze.  They want to create a database optimized to analyze which songs user's are playing. To perform this analysis they envision a database schema and extract-transform-load (ETL) pipeline.
 
-## Analytic Needs
+## Design
 
-What songs are subscriber's listening to?  To answer this question I am going to restructure the Sparkify log files into a relational database for its analytical capabilities.  Log files of subscriber activities are gathered using Sparkify's Online Transactional Processing System that is optimized for fast writes.  Think log files.  Profiting from analysis of user data improves with increased volume, greater integrity and minimal redundancy.  This is the realm of data warehouses, and ingesting transactional data requires the data that it be restructured.  Star schemas help to normalize the data so that desired queries are simplified.  Think of tables of data where each row has a unique identifier or primary key.  This is know as the second-normal-form and tables of this kind are common in data warehouses.  The idea of star schema is simple, one central fact table that is related to dimension tables by their primary keys.  
+What songs are subscriber's listening to?  To answer this question I am going to restructure the Sparkify log files into a relational database for its analytical capabilities.  Log files of subscriber activities are gathered using Sparkify's online transactional processing system (OLTP) that is optimized for fast writes.  Think log files.  Profiting from analysis of user data improves with increased volume, greater integrity and minimal redundancy.  This is the realm of data warehouses, and ingesting transactional data requires the data that it be restructured.  Star schemas help to normalize the data so that desired queries are simplified.  Think of tables of data where each row has a unique identifier or primary key.  This is know as the second-normal-form and tables of this kind are common in data warehouses.  The idea of star schema is simple, one central fact table that is related to dimension tables by their primary keys.  Star schemas are prevalent in online analytical processing systems (OLAP) such as this data warehouse. 
+
+
 
 ## Implementation
+
 PostgreSQL tables are managed using SQL statements that are executed using the Python psycopg2 package.  The star schema is implemented in these SQL statements.  Data files are read using the `read_json` function that returns a panda's dataframe.  Columns and rows from the dataframe are selected and output as tuples for insertion into the database.  Connections to the database are managed by psycopg2 that also provided the cursor object used to interact with the tables.  
 
 
