@@ -17,12 +17,12 @@ time_table_drop = "DROP TABLE IF EXISTS dim_time;"
 songplay_table_create = """
 CREATE TABLE IF NOT EXISTS fact_songplay (
     songplay_id SERIAL, 
-    user_id varchar, 
+    user_id int NOT NULL, 
     song_id varchar, 
     artist_id varchar, 
-    session_id int, 
-    start_time timestamp, 
-    level varchar, 
+    session_id int NOT NULL, 
+    start_time timestamp NOT NULL, 
+    level varchar NOT NULL, 
     location varchar, 
     user_agent varchar,
     PRIMARY KEY (songplay_id));
@@ -30,22 +30,22 @@ CREATE TABLE IF NOT EXISTS fact_songplay (
 
 user_table_create = """
 CREATE TABLE IF NOT EXISTS dim_user (
-    user_id varchar, 
+    user_id int, 
     first_name varchar, 
     last_name varchar, 
     gender varchar, 
     level varchar,
-    PRIMARY KEY (user_id)
+    PRIMARY KEY (user_id, level)
 );
 """
 
 song_table_create = """
 CREATE TABLE IF NOT EXISTS dim_song (
     song_id varchar, 
-    title varchar, 
-    artist_id varchar, 
+    title varchar NOT NULL, 
+    artist_id varchar NOT NULL, 
     year int, 
-    duration numeric,
+    duration numeric CHECK (duration > 0),
     PRIMARY KEY (song_id)
 );
 """
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS dim_song (
 artist_table_create = """
 CREATE TABLE IF NOT EXISTS dim_artist (
     artist_id varchar, 
-    name varchar, 
+    name varchar NOT NULL, 
     location varchar, 
     latitude numeric, 
     longitude numeric,
@@ -97,7 +97,13 @@ INSERT INTO dim_user (
     gender, 
     level) 
 VALUES (%s, %s, %s, %s, %s)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (user_id, level) 
+DO
+    UPDATE
+    SET level = EXCLUDED.level, 
+        first_name = EXCLUDED.first_name,
+        last_name = EXCLUDED.last_name,
+        gender = EXCLUDED.gender;
 """
 
 song_table_insert = """
@@ -140,7 +146,7 @@ ON CONFLICT DO NOTHING;
 song_select = """
 SELECT s.song_id, a.artist_id FROM dim_song s
 JOIN dim_artist a ON s.artist_id = a.artist_id
-WHERE s.title = %s AND a.name = %s AND s.duration = %s;
+WHERE s.title = %s AND a.artist_id = %s AND s.duration = %s;
 """
 
 # QUERY LISTS
