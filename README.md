@@ -17,7 +17,22 @@ What songs are subscriber's listening to?  To answer this question I am going to
 
 
 
-## Files
+## Files Descriptions
+1. `data` directory - Holds the song data and the log data.  
+2. `create_tables.py` - Uses `sql_queries.py` to first delete and re-create the database and necessary tables.  Note: Data is not imported.
+3. `environment.yml` - Python packages required to run this application. 
+4. `etl_prototype.py` - Prototype for the data processing pipeline.  
+5. `etl.ipynb` - Exported from `etl.py` using tooling provided by the [Python Plugin](https://code.visualstudio.com/docs/languages/python) for [Visual Studio Code](https://code.visualstudio.com/).
+6. `sql_queries.py` - Creates, inserts and drops the tables that implement the the star schema.
+7. `test.ipynb` - Tests whether data has been inserted into all of the database's tables.
+
+## Running
+
+1. Install: Download this project from Github [https://github.com/robOcity/song_play](https://github.com/robOcity/song_play) by running `git clone https://github.com/robOcity/song_play`. 
+ 
+2. Configure: Configure you Python environment by running `conda env create -f environment.yml`.  Regrettable, if you are using pip you can't there from here.  In other words, conda does not support creating a `requirments.txt` file directly. 
+ 
+3. Run:  In your terminal, change directories into the `song_play`  directory.  Then run `python etl.py`.  
 
 ## References
 
