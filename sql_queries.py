@@ -17,7 +17,7 @@ time_table_drop = "DROP TABLE IF EXISTS dim_time;"
 songplay_table_create = """
 CREATE TABLE IF NOT EXISTS fact_songplay (
     songplay_id SERIAL, 
-    user_id int, 
+    user_id varchar, 
     song_id varchar, 
     artist_id varchar, 
     session_id int, 
