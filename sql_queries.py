@@ -1,3 +1,9 @@
+"""
+SQL statements to create tables, insert data into them and 
+drop them from the database.
+"""
+
+
 # DROP TABLES
 
 songplay_table_drop = "DROP TABLE IF EXISTS fact_songplay;"
