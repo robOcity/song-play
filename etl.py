@@ -44,6 +44,7 @@ def process_log_file(cur, filepath):
     """
     # open log file
     df = pd.read_json(filepath, lines=True)
+    print(f'LOG FILE SHAPE: {df.shape}')
 
     # filter by NextSong action
     df = df.loc[df.page.isin(["NextSong"])]
@@ -83,10 +84,15 @@ def process_log_file(cur, filepath):
 
         # get songid and artistid from song and artist tables
         cur.execute(song_select, (row.song, row.artist, row.length))
+        print('MOGIFY:', cur.mogrify(song_select,
+                                     (row.song, row.artist, row.length)))
         results = cur.fetchone()
+        # print(f'LOG SONG PLAYS: {row.song}, {row.artist}, {row.length}')
+        #print(f'SONG_SELECT RESULTS: {results}')
 
         if results:
             songid, artistid = results
+            print(f'FOUND: s:{songid} a:{artistid} *********************')
         else:
             songid, artistid = None, None
 
@@ -101,6 +107,7 @@ def process_log_file(cur, filepath):
             row.location,
             row.userAgent,
         )
+        #print(f'SONG_DATA: {songplay_data}')
         cur.execute(songplay_table_insert, songplay_data)
 
 
