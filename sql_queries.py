@@ -146,7 +146,7 @@ ON CONFLICT DO NOTHING;
 song_select = """
 SELECT s.song_id, a.artist_id FROM dim_song s
 JOIN dim_artist a ON s.artist_id = a.artist_id
-WHERE s.title = %s AND a.artist_id = %s AND s.duration = %s;
+WHERE s.title = %s AND a.name = %s AND s.duration = %s;
 """
 
 # QUERY LISTS
