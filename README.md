@@ -38,7 +38,10 @@ PostgreSQL tables are managed using SQL statements that are executed using the P
 
 2. Configure: Configure you Python environment by running `conda env create -f environment.yml`.  Regrettable, if you are using pip you can't there from here.  In other words, conda does not support creating a `requirments.txt` file directly.
 
-3. Run:  In your terminal, change directories into the `song_play`  directory.  Then run `python etl.py`.  
+3. Run:  
+   1. Change directories into the `song_play` directory
+   2. Run `python create_tables.py` 
+   3. Run `python etl.py`  
 
 ## References
 
